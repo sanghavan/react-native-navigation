@@ -6,6 +6,7 @@ import Screens from './Screens';
 import Navigation from '../services/Navigation';
 import { component } from '../commons/Layouts';
 import testIDs from '../testIDs';
+import { FlatList, Text } from 'react-native';
 
 const {
   PUSH_BTN,
@@ -23,6 +24,14 @@ const {
 } = testIDs;
 
 export default class StackScreen extends React.Component<NavigationComponentProps> {
+  constructor(props: NavigationComponentProps) {
+    super(props);
+
+    for (let i = 0; i < 2000; i++) {
+      this._data.push(i.toString());
+    }
+  }
+
   static options(): Options {
     return {
       topBar: {
@@ -32,6 +41,14 @@ export default class StackScreen extends React.Component<NavigationComponentProp
         },
       },
     };
+  }
+
+  private _data: string[] = [];
+
+  private _renderItem = ({ item }: { item: string }) => {
+    return <Text>
+      {item}
+    </Text>
   }
 
   render() {
@@ -74,6 +91,12 @@ export default class StackScreen extends React.Component<NavigationComponentProp
           label="Push Stack Commands"
           testID={STACK_COMMANDS_BTN}
           onPress={this.pushStackCommands}
+        />
+        <FlatList
+          style={{flex: 1}}
+          data={this._data}
+          keyExtractor={item => item}
+          renderItem={this._renderItem}
         />
       </Root>
     );

@@ -6,6 +6,7 @@ import Navigation from './../services/Navigation';
 import Screens from './Screens';
 import { component } from '../commons/Layouts';
 import testIDs from '../testIDs';
+import { FlatList, Text } from 'react-native';
 
 const {
   SWITCH_TAB_BY_INDEX_BTN,
@@ -18,6 +19,14 @@ const {
 } = testIDs;
 
 export default class FirstBottomTabScreen extends React.Component<NavigationComponentProps> {
+  constructor(props: NavigationComponentProps) {
+    super(props);
+
+    for (let i = 0; i < 2000; i++) {
+      this._data.push(i.toString());
+    }
+  }
+
   static options(): Options {
     return {
       layout: {
@@ -38,6 +47,14 @@ export default class FirstBottomTabScreen extends React.Component<NavigationComp
 
   dotVisible = true;
   badgeVisible = true;
+
+  private _data: string[] = [];
+
+  private _renderItem = ({ item }: { item: string }) => {
+    return <Text>
+      {item}
+    </Text>
+  }
 
   render() {
     return (
@@ -63,6 +80,12 @@ export default class FirstBottomTabScreen extends React.Component<NavigationComp
           onPress={this.hideTabsOnPush}
         />
         <Button label="Push" onPress={this.push} />
+        <FlatList
+          style={{flex: 1}}
+          data={this._data}
+          keyExtractor={item => item}
+          renderItem={this._renderItem}
+        />
       </Root>
     );
   }
